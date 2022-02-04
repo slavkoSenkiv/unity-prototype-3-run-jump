@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody playerRb;
+    private Animator playerAnim;
     public float jumpForce = 1000;
     public float gravityModifier = 2;
     public bool onTheGround = true;
@@ -13,7 +14,8 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerRb = GetComponent<Rigidbody>();   
+        playerRb = GetComponent<Rigidbody>();
+        playerAnim = GetComponent<Animator>();
         Physics.gravity *= gravityModifier;
     }
 
@@ -25,6 +27,7 @@ public class PlayerController : MonoBehaviour
         {
             playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
             onTheGround = false;
+            playerAnim.SetTrigger("Jump_trig");
         }
     }
 
@@ -38,6 +41,8 @@ public class PlayerController : MonoBehaviour
         else if (collision.gameObject.CompareTag("obstacle"))
         {
             Debug.Log("Game Over");
+            playerAnim.SetBool("Death_b", true);
+            playerAnim.SetInteger("DeathType_int", 1);
             gameOver = true;
 
         }
